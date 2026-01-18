@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>TKR_HELPDESK</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+body{margin:0;font-family:Segoe UI,Arial,sans-serif;background:#f6f7fb;color:#252b35}
+header{background:#fff;border-bottom:1px solid #e5e7eb}
+.navbar{max-width:1200px;margin:auto;padding:14px 20px;display:flex;justify-content:space-between;align-items:center}
+.brand{font-weight:800;font-size:18px}
+nav span{margin-left:16px;font-weight:600;cursor:pointer}
+nav span:hover{color:#1a3da9}
+#logoutBtn{color:#dc2626}
+
+.hero{text-align:center;margin:50px auto}
+.hero h1{font-size:36px}
+.hero h1 span{color:#1a3da9}
+.hero p{color:#6b7280;font-size:17px}
+.hero button{
+  margin-top:20px;
+  padding:12px 26px;
+  border:none;
+  border-radius:24px;
+  background:#1a3da9;
+  color:#fff;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.container{max-width:1200px;margin:auto;padding:20px}
+.hidden{display:none}
+.section-title{font-size:22px;font-weight:800;margin:30px 0 15px}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.card{background:#fff;padding:20px;border-radius:16px;box-shadow:0 10px 26px rgba(0,0,0,.06)}
+.card b{font-size:16px}
+.card p{font-size:14px;color:#6b7280}
+.card small{font-size:13px;color:#475569}
+
+input,textarea{width:100%;padding:10px;margin:6px 0;border-radius:10px;border:1px solid #d1d5db}
+
+button.primary{background:#1a3da9;color:#fff;border:none;border-radius:10px;padding:8px 14px;font-weight:600;cursor:pointer}
+button.secondary{background:#e5e7eb;border:none;border-radius:10px;padding:6px 12px;cursor:pointer}
+button.danger{background:#dc2626;color:#fff;border:none;border-radius:10px;padding:6px 12px;cursor:pointer}
+
+.chat-box{background:#fff;border-radius:16px;padding:16px;min-height:80px;box-shadow:0 10px 26px rgba(0,0,0,.06);margin-bottom:10px}
+.notice{background:#fff3cd;color:#856404;padding:12px;border-radius:12px;margin-bottom:15px}
+
+footer{margin-top:60px;padding:30px 20px;background:#111827;color:#cbd5f5;text-align:center;font-size:14px}
+footer a{color:#93c5fd;text-decoration:none}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="navbar">
+    <div class="brand">🏛️ TKR_HELPDESK</div>
+    <nav>
+      <span onclick="show('home')">Home</span>
+      <span onclick="show('blocks')">Blocks</span>
+      <span onclick="show('events')">Events</span>
+      <span onclick="show('assistant')">Assistant</span>
+      <span onclick="show('admin')">Admin</span>
+      <span id="logoutBtn" class="hidden" onclick="logout()">Logout</span>
+    </nav>
+  </div>
+</header>
+
+<!-- HOME -->
+<section id="home">
+  <div class="hero">
+    <h1>Welcome to <span>TKR_HELPDESK</span></h1>
+    <p>Smart campus navigation and assistance system</p>
+    <button onclick="show('assistant')">Start Chat Now</button>
+  </div>
+</section>
+
+<!-- BLOCKS -->
+<section id="blocks" class="hidden">
+  <div class="container">
+    <div class="section-title">Campus Blocks</div>
+
+    <div id="addBlockBox" class="hidden">
+      <h3>Add Block</h3>
+      <input id="bname" placeholder="Block name">
+      <textarea id="bdesc" placeholder="Description"></textarea>
+      <textarea id="bdir" placeholder="Directions"></textarea>
+      <button class="primary" onclick="addBlock()">Add Block</button>
+    </div>
+
+    <div id="blocksList" class="grid"></div>
+  </div>
+</section>
+
+<!-- EVENTS -->
+<section id="events" class="hidden">
+  <div class="container">
+    <div class="section-title">College Events</div>
+
+    <div id="addEventBox" class="hidden">
+      <h3>Add / Edit Event</h3>
+      <input id="etitle" placeholder="Event title">
+      <textarea id="edesc" placeholder="Event description"></textarea>
+      <button class="primary" onclick="saveEvent()">Save Event</button>
+    </div>
+
+    <div id="eventsList" class="grid"></div>
+  </div>
+</section>
+
+<!-- ASSISTANT -->
+<section id="assistant" class="hidden">
+  <div class="container">
+    <div class="section-title">Text Chat Assistant (English / Telugu)</div>
+    <div id="chatBox" class="chat-box">
+      👋 Hello! Ask about blocks like <b>A Block</b>, <b>Canteen</b>, or type in Telugu.
+    </div>
+    <input id="q" placeholder="Type in English or Telugu">
+    <button class="primary" onclick="sendChat()">Send</button>
+
+    <div class="section-title" style="margin-top:40px">
+      Voice Assistant (English only)
+    </div>
+    <button class="primary" onclick="startVoice()">🎤 Start Voice Assistant</button>
+  </div>
+</section>
+
+<!-- ADMIN -->
+<section id="admin" class="hidden">
+  <div class="container">
+    <div id="adminNotice" class="notice">Admin login required.</div>
+    <input id="u" placeholder="Username">
+    <input id="p" type="password" placeholder="Password">
+    <button class="primary" onclick="login()">Login</button>
+  </div>
+</section>
+
+<footer>
+  <p><b>TKR College of Engineering and Technology</b></p>
+  <p>Engineering college</p>
+  <p><a href="https://tkrcet.ac.in" target="_blank">tkrcet.ac.in</a></p>
+  <p>Survey No -8/A Medbowli, Meerpet, Telangana 500097, India</p>
+  <p>📞 +91 91003 77790</p>
+  <p>Made with ❤️ by Nikhitha Reddy and Team</p>
+</footer>
+
+<script>
+let admin=false;
+let editEventIndex=null;
+
+/* BLOCKS */
+let blocks=[
+  {name:"A Block",desc:"Main academic block.",dir:"From B Gate walk 25 meters straight, turn right.",locked:true},
+  {name:"Canteen",desc:"Food court for students.",dir:"From B Gate walk 12 meters straight, right side.",locked:true},
+  {name:"R9 Block",desc:"Academic block near hostel.",dir:"From B Gate walk 5 meters straight.",locked:false}
+];
+
+/* EVENTS */
+let events=[
+  {title:"Annual Tech Fest",desc:"Student innovation showcase."},
+  {title:"Sports Tournament",desc:"Inter-department sports events."}
+];
+
+/* NAV */
+function show(id){
+  document.querySelectorAll("section").forEach(s=>s.classList.add("hidden"));
+  document.getElementById(id).classList.remove("hidden");
+}
+
+/* ADMIN */
+function login(){
+  if(u.value==="admin"&&p.value==="demo123"){
+    admin=true;
+    logoutBtn.classList.remove("hidden");
+    adminNotice.classList.add("hidden");
+    addBlockBox.classList.remove("hidden");
+    addEventBox.classList.remove("hidden");
+    alert("Admin logged in");
+    render();
+    show("blocks");
+  } else alert("Invalid credentials");
+}
+
+function logout(){
+  admin=false;
+  logoutBtn.classList.add("hidden");
+  adminNotice.classList.remove("hidden");
+  addBlockBox.classList.add("hidden");
+  addEventBox.classList.add("hidden");
+  alert("Logged out");
+  show("home");
+  render();
+}
+
+/* BLOCK CRUD */
+function addBlock(){
+  if(!admin) return;
+  blocks.push({name:bname.value,desc:bdesc.value,dir:bdir.value,locked:false});
+  bname.value=bdesc.value=bdir.value="";
+  render();
+}
+
+function editBlock(i){
+  if(blocks[i].locked) return;
+  const d=prompt("Edit description",blocks[i].desc);
+  const r=prompt("Edit directions",blocks[i].dir);
+  if(d!==null) blocks[i].desc=d;
+  if(r!==null) blocks[i].dir=r;
+  render();
+}
+
+function deleteBlock(i){
+  if(!admin||blocks[i].locked) return;
+  if(confirm("Delete block?")){blocks.splice(i,1);render();}
+}
+
+/* EVENT CRUD */
+function saveEvent(){
+  if(!admin) return;
+  if(editEventIndex===null){
+    events.push({title:etitle.value,desc:edesc.value});
+  } else {
+    events[editEventIndex]={title:etitle.value,desc:edesc.value};
+    editEventIndex=null;
+  }
+  etitle.value=edesc.value="";
+  render();
+}
+
+function editEvent(i){
+  editEventIndex=i;
+  etitle.value=events[i].title;
+  edesc.value=events[i].desc;
+}
+
+function deleteEvent(i){
+  if(!admin) return;
+  if(confirm("Delete event?")){events.splice(i,1);render();}
+}
+
+/* CHAT */
+function isTelugu(t){return /[\u0C00-\u0C7F]/.test(t);}
+function sendChat(){
+  const msg=q.value.trim();
+  let reply="Information not available.";
+  blocks.forEach(b=>{
+    if(msg.toLowerCase().includes(b.name.toLowerCase())){
+      reply=isTelugu(msg)?`${b.name} వివరాలు: ${b.dir}`:`${b.name}: ${b.desc} ${b.dir}`;
+    }
+  });
+  chatBox.innerText=reply;
+  q.value="";
+}
+
+/* VOICE */
+function startVoice(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){alert("Voice not supported");return;}
+  const rec=new SR();
+  rec.lang="en-US";
+  rec.onresult=e=>{
+    q.value=e.results[0][0].transcript;
+    sendChat();
+    speechSynthesis.speak(new SpeechSynthesisUtterance(chatBox.innerText));
+  };
+  rec.start();
+}
+
+/* RENDER */
+function render(){
+  blocksList.innerHTML=blocks.map((b,i)=>`
+    <div class="card">
+      <b>${b.name}</b>
+      <p>${b.desc}</p>
+      <small>${b.dir}</small>
+      ${admin&&!b.locked?`
+        <br><button class="secondary" onclick="editBlock(${i})">Edit</button>
+        <button class="danger" onclick="deleteBlock(${i})">Delete</button>`:""}
+    </div>`).join("");
+
+  eventsList.innerHTML=events.map((e,i)=>`
+    <div class="card">
+      <b>${e.title}</b>
+      <p>${e.desc}</p>
+      ${admin?`
+        <br><button class="secondary" onclick="editEvent(${i})">Edit</button>
+        <button class="danger" onclick="deleteEvent(${i})">Delete</button>`:""}
+    </div>`).join("");
+}
+
+render();
+</script>
+
+</body>
+</html>
