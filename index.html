@@ -255,17 +255,39 @@ function sendChat(){
   q.value="";
 }
 
-/* VOICE */
+/* VOICE – GITHUB PAGES SAFE */
 function startVoice(){
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
-  if(!SR){alert("Voice not supported");return;}
-  const rec=new SR();
-  rec.lang="en-US";
-  rec.onresult=e=>{
-    q.value=e.results[0][0].transcript;
-    sendChat();
-    speechSynthesis.speak(new SpeechSynthesisUtterance(chatBox.innerText));
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if(!SR){
+    alert("Voice assistant not supported. Use Chrome or Edge.");
+    return;
+  }
+
+  if(location.protocol === "file:"){
+    alert("Voice assistant works only on HTTPS (GitHub Pages) or localhost.");
+    return;
+  }
+
+  const rec = new SR();
+  rec.lang = "en-US";
+
+  rec.onstart = () => {
+    chatBox.innerText = "🎤 Listening... please speak.";
   };
+
+  rec.onerror = (e) => {
+    alert("Microphone error: " + e.error);
+  };
+
+  rec.onresult = (e) => {
+    q.value = e.results[0][0].transcript;
+    sendChat();
+    speechSynthesis.speak(
+      new SpeechSynthesisUtterance(chatBox.innerText)
+    );
+  };
+
   rec.start();
 }
 
